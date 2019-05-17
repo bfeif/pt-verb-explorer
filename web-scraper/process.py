@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import ujson as json
 HOME = '../'
 IMPERATIVO_TEMPOS = ['Imperativo Afirmativo', 'Imperativo Negativo']
-BASE_URL = 'https://www.conjugacao.com.br/verbo'
+BASE_URL = 'https://www.conjugacao.com.br/verbo-'
 
 # a function to make one conjugation into a dictionary
 def dic_conjugation(conjugation, subject_index=0, verb_index=1):
@@ -55,9 +55,6 @@ def dic_mood(bs4_tense_section):
 # get page
 def get_page(url):
 
-	# Set the URL you want to webscrape from
-	url = 'https://www.conjugacao.com.br/verbo-ir/'
-
 	# Connect to the URL
 	response = requests.get(url)
 
@@ -67,14 +64,21 @@ def get_page(url):
 	# return BeautifulSoup object
 	return page
 
+# preprocess verb string
+def preprocess_verb_string(verb_name):
+	return verb_name.replace('ç', 'c').replace('ô', 'o')
+
 # function that gets all the conjugations for a verb
 def get_verb(verb_string):
 
 	# get the url for querying
-	url = BASE_URL + verb_string + '/'
+	url = BASE_URL + preprocess_verb_string(verb_string) + '/'
+	print(verb)
+	print(url)
 
 	# get the page
 	page = get_page(url)
+	print(page)
 	
 	# get all the conjugation 'moods'
 	all_data = page.find_all("div", { "class" : "tempos" })
@@ -99,13 +103,13 @@ def get_verb(verb_string):
 def dump_verb(verb_string, verb_conjugation_set):
 
 	# u know it
-	path = HOME + 'data/verbo_' + verb_string + '.json'
+	path = HOME + 'data/verb_data/verbo_' + verb_string + '.json'
 	json.dump(verb_conjugation_set, open(path, 'w'))
 
 # main method
 if __name__ == "__main__":
 
 	# verbs to do shit for
-	verbs = json.load(open(HOME + 'data/50_top_verbs.json', 'r'))
+	verbs = json.load(open(HOME + 'data/summary/50_top_verbs.json', 'r'))
 	for verb in verbs:
 		get_verb(verb)
