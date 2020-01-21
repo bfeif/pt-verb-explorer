@@ -1,6 +1,7 @@
 import os.path
 import ujson as json
 import pandas as pd
+import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
@@ -29,8 +30,30 @@ irregular_statistic.columns = ['irregularity']
 
 # merge the irregularity with rank
 df_rank_irreg = pd.concat([verbs_ranked, irregular_statistic], axis=1)
-plt.scatter(df_rank_irreg['rank'], df_rank_irreg['irregularity'])
-plt.xlabel('Verb Frequency of Usage (Ordinal)')
-plt.ylabel('Verb Irregularity')
-plt.title('Portuguese Verb Conjugation Irregularity')
-plt.show()
+df_rank_irreg = df_rank_irreg.drop(labels=['pôr', 'vir', 'sair'], axis=0)
+df_rank_irreg['irregularity_cdf'] = np.cumsum(df_rank_irreg['irregularity'])/np.sum(df_rank_irreg['irregularity'])
+
+# plot a normal plot and a cdf
+for i in ['', ' CDF']:
+	plt.rcParams["figure.figsize"] = (10, 7)
+	title = 'Portuguese Verb Conjugation Irregularity' + i
+	ylabel = 'Verb Irregularity'
+	ylabel = ylabel + ' (cumulative)' if 'CDF' in i else ylabel
+	if 'CDF' in i:
+		tick_locations = [0] + list(df_rank_irreg['rank'] + 1)
+		tick_labels = [' '] + list(df_rank_irreg.index)
+		x = tick_locations
+		y = [0] + list(df_rank_irreg['irregularity_cdf'])
+		plt.plot(x, y)
+	else:
+		x = df_rank_irreg['rank']
+		y = df_rank_irreg['irregularity']
+		tick_locations = list(df_rank_irreg['rank'])
+		tick_labels = df_rank_irreg.index
+		plt.scatter(x,y)
+	plt.xlabel('Verb, Ordered by Frequency of Usage')
+	plt.xticks(tick_locations, tick_labels, rotation=90)
+	plt.ylabel(ylabel)
+	plt.title(title)
+	plt.tight_layout()
+	plt.show()
