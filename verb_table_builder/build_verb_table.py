@@ -1,7 +1,7 @@
 import os
 import ujson as json
 import pandas as pd
-HOME = '../'
+HOME = os.environ['VERB_TABLE_BUILDER_HOME']
 VERB_JSON_LOCATION = 'data/verb-jsons'
 TOP_VERB_LIST_LOCATION = 'data/verb-list/50_top_verbs.json'
 VERB_JSON_FILENAME = 'verbo_{}.json'
@@ -16,6 +16,8 @@ def load_verb_json_data(verb_strings):
 
 def build_verb_table(verb_list, save=True):
     '''Function that builds the verb table'''
+
+    print('Building verb tables...')
 
     # load verb data from jsons
     verbs = load_verb_json_data(verb_list)

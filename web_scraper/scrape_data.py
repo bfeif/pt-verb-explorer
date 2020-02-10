@@ -2,7 +2,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import ujson as json
-HOME = '../'
+HOME = os.environ['VERB_TABLE_BUILDER_HOME']
 VERB_JSON_LOCATION = 'data/verb-jsons'
 TOP_VERB_LIST_LOCATION = 'data/verb-list/50_top_verbs.json'
 VERB_JSON_FILENAME = 'verbo_{}.json'
@@ -149,7 +149,7 @@ def scrape_verbs(verbs_to_scrape, dump=True):
 		os.mkdir(path)
 
 	# Scrape all the verbs
-	for verb in verbs:
+	for verb in verbs_to_scrape:
 		print('Collecting data for verb {}...'.format(verb))
 		scrape_verb(verb)
 
