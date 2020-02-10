@@ -4,7 +4,7 @@ Python code that scrapes and builds a table of verb conjugations and boolean ver
 
 ## Overview
 
-Pre-built verb tables for both conjugations and boolean-irregularities, for the 50 highest frequency verbs in Portuguese, can be downloaded here.
+I have pre-built verb tables for both conjugations and boolean-irregularities, for the 50 highest frequency verbs in Portuguese. You can download them [here as a two sheet spreadhsheet on google drive](https://docs.google.com/spreadsheets/d/1tv1fjhV5BaeYCNVyje6sY5dxAxSMv_vy0ECVbx0eQN8/edit?usp=sharing) or as two csvs [of conjugations](https://drive.google.com/file/d/1gPWyk7b5PfkpZZesBADqrBqQTq3V0Q33/view?usp=sharing) and [of irregularities](https://drive.google.com/file/d/1Jkb61deb6Ov7qmZO-KpY9v5zIxqx_qP0/view?usp=sharing).
 If you'd like to run the python code to generate the tables on your own system, proceed to **Getting Started**.
 
 ## Getting Started
