@@ -1,4 +1,5 @@
 data/figures
 data/verb-jsons
 data/verb-tables
+__pycache__
 .DS_Store
