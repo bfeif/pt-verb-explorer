@@ -3,9 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 import ujson as json
 HOME = '../'
-DATA_SAVE_LOCATION = 'data/verb-jsons'
-VERB_LOAD_LOCATION = 'data/verb-list/50_top_verbs.json'
-VERB_SAVE_NAME = 'verbo_{}.json'
+VERB_JSON_LOCATION = 'data/verb-jsons'
+TOP_VERB_LIST_LOCATION = 'data/verb-list/50_top_verbs.json'
+VERB_JSON_FILENAME = 'verbo_{}.json'
 IMPERATIVO_TEMPOS = ['Imperativo Afirmativo', 'Imperativo Negativo']
 BASE_URL = 'https://www.conjugacao.com.br/verbo-'
 SUBJECT_LOOKUP = {
@@ -136,7 +136,7 @@ def dump_verb(verb_string, verb_conjugation_set):
 
 	# You know it
 	print('Saving data for verb {}...'.format(verb_string))
-	path = os.path.join(HOME, DATA_SAVE_LOCATION, VERB_SAVE_NAME.format(verb_string))
+	path = os.path.join(HOME, VERB_JSON_LOCATION, VERB_JSON_FILENAME.format(verb_string))
 	json.dump(verb_conjugation_set, open(path, 'w'))
 
 
@@ -144,7 +144,7 @@ def scrape_verbs(verbs_to_scrape, dump=True):
 	'''Scrape all the verbs'''
 
 	# Set up the folder structure if necessary
-	path = os.path.join(HOME, DATA_SAVE_LOCATION)
+	path = os.path.join(HOME, VERB_JSON_LOCATION)
 	if not os.path.exists(path):
 		os.mkdir(path)
 
@@ -158,7 +158,7 @@ def scrape_verbs(verbs_to_scrape, dump=True):
 if __name__ == "__main__":
 
 	# Verbs to do shit for
-	verbs = json.load(open(os.path.join(HOME, VERB_LOAD_LOCATION), 'r'))
+	verbs = json.load(open(os.path.join(HOME, TOP_VERB_LIST_LOCATION), 'r'))
 
 	# run
 	scrape_verbs(verbs)
