@@ -1,7 +1,11 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 import ujson as json
 HOME = '../'
+DATA_SAVE_LOCATION = 'data/verb-jsons'
+VERB_LOAD_LOCATION = 'data/verb-list/50_top_verbs.json'
+VERB_SAVE_NAME = 'verbo_{}.json'
 IMPERATIVO_TEMPOS = ['Imperativo Afirmativo', 'Imperativo Negativo']
 BASE_URL = 'https://www.conjugacao.com.br/verbo-'
 SUBJECT_LOOKUP = {
@@ -91,38 +95,38 @@ def dic_mood(bs4_tense_section):
 	# possible values: [Indicativo, Subjuntivo, Imperativo]
 	mood_title = bs4_tense_section.find("h3", {"class": "modoconjuga"}).string
 
-	# get all the tenses of the mood into a list of tags
-	# possible values: eg. [affirmative, negative] for imperative
+	# Get all the tenses of the mood into a list of tags
+	# Possible values: eg. [affirmative, negative] for imperative
 	mood_tenses = bs4_tense_section.find_all(
 		"div", {"class": "tempo-conjugacao"})
 
-	# parse the mood tenses
+	# Parse the mood tenses
 	mood_tenses_parsed = dict([dic_tense(mood_tense, mood_title)
 							   for mood_tense in mood_tenses])
 
-	# return
+	# Return
 	return mood_title, mood_tenses_parsed
 
 
-def get_verb(verb_string, dump=True):
+def scrape_verb(verb_string, dump=True):
 	'''get all the conjugations for a verb'''
 
-	# get the url for querying
+	# Get the url for querying
 	url = BASE_URL + preprocess_verb_string(verb_string) + '/'
 
-	# get the page
+	# Get the page
 	page = get_page(url)
 
-	# get all the conjugation 'moods'
+	# Get all the conjugation 'moods'
 	all_data = page.find_all("div", {"class": "tempos"})
 
-	# we only care about the first three sets: indicativo, subjuntivo, imperativo
+	# We only care about the first three sets: indicativo, subjuntivo, imperativo
 	moods_unparsed = all_data[:3]
 
-	# parse that sheit baby!
+	# Parse that sheit baby!
 	moods_parsed = dict([dic_mood(mood) for mood in moods_unparsed])
 
-	# output test
+	# Output test
 	if dump:
 		dump_verb(verb_string, moods_parsed)
 
@@ -130,16 +134,31 @@ def get_verb(verb_string, dump=True):
 def dump_verb(verb_string, verb_conjugation_set):
 	'''save the verb data'''
 
-	# u know it
-	path = HOME + 'data/verb_jsons_02/verbo_' + verb_string + '.json'
+	# You know it
+	print('Saving data for verb {}...'.format(verb_string))
+	path = os.path.join(HOME, DATA_SAVE_LOCATION, VERB_SAVE_NAME.format(verb_string))
 	json.dump(verb_conjugation_set, open(path, 'w'))
+
+
+def scrape_verbs(verbs_to_scrape, dump=True):
+	'''Scrape all the verbs'''
+
+	# Set up the folder structure if necessary
+	path = os.path.join(HOME, DATA_SAVE_LOCATION)
+	if not os.path.exists(path):
+		os.mkdir(path)
+
+	# Scrape all the verbs
+	for verb in verbs:
+		print('Collecting data for verb {}...'.format(verb))
+		scrape_verb(verb)
 
 
 # main method
 if __name__ == "__main__":
 
-	# verbs to do shit for
-	verbs = json.load(open(HOME + 'data/summary/50_top_verbs.json', 'r'))
-	for verb in verbs:
-		print(verb)
-		get_verb(verb)
+	# Verbs to do shit for
+	verbs = json.load(open(os.path.join(HOME, VERB_LOAD_LOCATION), 'r'))
+
+	# run
+	scrape_verbs(verbs)
