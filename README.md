@@ -1,6 +1,7 @@
 # pt-verb-table-builder
 
 Python code that scrapes and builds a table of verb conjugations and boolean verb irregularities for the Portuguese language.
+An example of the exploration and analyses that can be done using this code can be found in the [demo ipython notebook about the L-shaped morphome](https://github.com/bfeif/pt-verb-table-builder/blob/master/Demo%2C%20L-shaped%20Morphome.ipynb).
 
 ## Overview
 
@@ -19,10 +20,10 @@ This project is created with Python, and uses Miniconda as a package manager. As
 ### Getting Set Up
 
 Once the Miniconda installation is complete and this repository is cloned to your local machine, open up a terminal process, navigate to the cloned `pt-verb-table-builder` directory and run the following commands:
-1. `conda env create -f environment.yml ` (creates the conda environment from the environment configuration file)
-2. `conda activate pt-verb-table-builder ` (activates the environment you've just created)
-3. ```conda env config vars set VERB_TABLE_BUILDER_HOME=`pwd` ``` (define a required config variable for where on your computer this code is stored)
-4. `conda activate pt-verb-table-builder `  (activate the environment again to set the config variable just defined)
+1. `conda env create -f environment.yml `
+2. `conda activate pt-verb-table-builder `
+3. ```conda env config vars set VERB_TABLE_BUILDER_HOME=`pwd` ```
+4. `conda activate pt-verb-table-builder ` (yes, this has to be run twice :o)
 
 ### Creating the Verb Tables
 
@@ -31,6 +32,10 @@ In the `pt-verb-table-builder` directory and with the conda environment `pt-verb
 
 The resulting verb tables will be stored as csvs in `pt-verb-table-builder/data/verb-tables/`.
 If you'd like to build the verb tables using more verbs than the default top 50 verbs, then more verbs can be added to the list at `pt-verb-table-builder/data/verb-list/50_top_verbs.json`.
+
+## Using the Verb Tables
+
+Check out the ipython notebook [demo about the L-shaped morphome](https://github.com/bfeif/pt-verb-table-builder/blob/master/Demo%2C%20L-shaped%20Morphome.ipynb) in order to get comfortable with using the verb tables.
 
 ## Acknowledgments
 
