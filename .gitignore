@@ -1,5 +1,13 @@
+# mac specific stuff
+.DS_Store
+
+# data
 data/figures
 data/verb-jsons
 data/verb-tables
+
+# packaging cache
 __pycache__
-.DS_Store
+
+# Jupyter Notebook 
+.ipynb_checkpoints
