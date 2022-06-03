@@ -2,7 +2,7 @@ import os
 import ujson as json
 from verb_table_builder import build_verb_table
 from web_scraper import scrape_data
-HOME = os.environ['VERB_TABLE_BUILDER_HOME']
+HOME = os.path.abspath('.')  # os.environ['VERB_TABLE_BUILDER_HOME']
 TOP_VERB_LIST_LOCATION = 'data/verb-list/50_top_verbs.json'
 
 # main method

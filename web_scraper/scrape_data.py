@@ -2,7 +2,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import ujson as json
-HOME = os.environ['VERB_TABLE_BUILDER_HOME']
+HOME = os.path.abspath('.')  # os.environ['VERB_TABLE_BUILDER_HOME']
 VERB_JSON_LOCATION = 'data/verb-jsons'
 TOP_VERB_LIST_LOCATION = 'data/verb-list/50_top_verbs.json'
 VERB_JSON_FILENAME = 'verbo_{}.json'
