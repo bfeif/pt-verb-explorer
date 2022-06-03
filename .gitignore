@@ -2,12 +2,14 @@
 .DS_Store
 
 # data
-data/figures
-data/verb-jsons
-data/verb-tables
+data/*
 
 # packaging cache
 __pycache__
 
 # Jupyter Notebook 
 .ipynb_checkpoints
+
+# environment stuff
+.idea/
+.venv/
