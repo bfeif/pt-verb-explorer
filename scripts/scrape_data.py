@@ -39,19 +39,19 @@ SUBJECT_LOOKUP = {
 
 
 def get_page(url):
-	'''Get a webpage given a url; return BeautifulSoup object'''
+	"""Get a webpage given a url; return BeautifulSoup object"""
 	response = requests.get(url)
 	page = BeautifulSoup(response.text, "html5lib")
 	return page
 
 
 def preprocess_verb_string(verb_name):
-	'''function that strips portuguese-specific special characters from the verb-string'''
+	"""Function that strips portuguese-specific special characters from the verb-string"""
 	return verb_name.replace('ç', 'c').replace('ô', 'o')
 
 
 def dic_conjugation(conjugation, tense_title):
-	'''make one conjugation into a dictionary'''
+	"""Make one conjugation into a dictionary"""
 	if tense_title == 'Imperativo Afirmativo':
 		subject_index = 1
 		verb_index = 0
@@ -70,7 +70,7 @@ def dic_conjugation(conjugation, tense_title):
 
 
 def dic_tense(mood_tense, mood_title):
-	'''make one tense of a mood (e.g. 'presente' of 'indicativo') into a dictionary'''
+	"""Make one tense of a mood (e.g. 'presente' of 'indicativo') into a dictionary"""
 
 	# get the title of the tense
 	# possible values: eg. [affirmative, negative] for imperative
@@ -89,7 +89,7 @@ def dic_tense(mood_tense, mood_title):
 
 
 def dic_mood(bs4_tense_section):
-	'''make a bs4 tense section a freaking normal data structure cus screw bs4'''
+	"""Make a bs4 tense section a freaking normal data structure cus screw bs4"""
 
 	# get the title of the mood
 	# possible values: [Indicativo, Subjuntivo, Imperativo]
@@ -109,7 +109,7 @@ def dic_mood(bs4_tense_section):
 
 
 def scrape_verb(verb_string, dump=True):
-	'''get all the conjugations for a verb'''
+	"""Get all the conjugations for a verb"""
 
 	# Get the url for querying
 	url = BASE_URL + preprocess_verb_string(verb_string) + '/'
@@ -132,7 +132,7 @@ def scrape_verb(verb_string, dump=True):
 
 
 def dump_verb(verb_string, verb_conjugation_set):
-	'''save the verb data'''
+	"""save the verb data"""
 
 	# You know it
 	print('Saving data for verb {}...'.format(verb_string))
@@ -141,7 +141,7 @@ def dump_verb(verb_string, verb_conjugation_set):
 
 
 def scrape_verbs(verbs_to_scrape, dump=True):
-	'''Scrape all the verbs'''
+	"""Scrape all the verbs"""
 
 	# Set up the folder structure if necessary
 	path = os.path.join(HOME, VERB_JSON_LOCATION)
@@ -160,5 +160,5 @@ if __name__ == "__main__":
 	# Verbs to do shit for
 	verbs = json.load(open(os.path.join(HOME, TOP_VERB_LIST_LOCATION), 'r'))
 
-	# run
+	# Run
 	scrape_verbs(verbs)

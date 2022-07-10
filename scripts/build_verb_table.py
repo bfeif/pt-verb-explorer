@@ -15,7 +15,7 @@ def load_verb_json_data(verb_strings):
 
 
 def build_verb_table(verb_list, save=True):
-    '''Function that builds the verb table'''
+    """Function that builds the verb table"""
 
     print('Building verb tables...')
 

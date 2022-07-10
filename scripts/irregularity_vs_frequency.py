@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
-HOME = '..'
+HOME = '.'
 DATA_FOLDER = os.path.join(HOME, 'data')
 
 #################################################
