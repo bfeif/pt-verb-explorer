@@ -65,7 +65,7 @@ hierarchical_index_mapper = {
     "level_3": "subject"}
 verb_df = verb_df.reset_index().rename(hierarchical_index_mapper, axis=1)
 
-# plot
+# plot verb frequency vs irregularity
 verb_df.groupby(
     'verb'
 ).agg(
@@ -77,4 +77,20 @@ plt.xlim((10**-4, 10**0))
 plt.xlabel('Verb Frequency')
 plt.ylabel('Verb Irregularity')
 plt.title('Verb Frequency vs Irregularity, Brazilian Portuguese')
+plt.show()
+
+# plot verb frequency vs rank
+verb_df.groupby(
+    'verb'
+)["term_frequency"].sum().sort_values(
+    ascending=False
+).reset_index().reset_index().plot(
+    kind='scatter',
+    x='index',
+    y='term_frequency'
+)
+plt.xlabel('Rank')
+plt.ylabel('Verb Frequency')
+plt.title('Verb Frequency vs Rank, Brazilian Portuguese')
+plt.show()
 plt.show()
