@@ -44,7 +44,6 @@ verb_frequency_df = pd.read_csv(
 ).set_index(
     'word'
 )
-verb_frequency_df['term_frequency'] = verb_frequency_df['term_count'] / verb_frequency_df['term_count'].sum()
 
 
 #################################################
@@ -52,11 +51,12 @@ verb_frequency_df['term_frequency'] = verb_frequency_df['term_count'] / verb_fre
 
 # join and manipulate to a useful format
 verb_df = verb_irregularity_df.merge(
-    verb_frequency_df["term_frequency"],
+    verb_frequency_df["term_count"],
     how="left",
     left_on="conjugation",
     right_index=True
 )
+verb_df['term_frequency'] = verb_df['term_count'] / verb_df['term_count'].sum()
 verb_df['term_frequency'] = verb_df['term_frequency'].fillna(0)
 hierarchical_index_mapper = {
     "level_0": "verb",

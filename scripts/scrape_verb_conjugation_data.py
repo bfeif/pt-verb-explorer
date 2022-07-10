@@ -89,7 +89,7 @@ def dic_tense(mood_tense, mood_title):
 
 
 def dic_mood(bs4_tense_section):
-	"""Make a bs4 tense section a freaking normal data structure cus screw bs4"""
+	"""Make a bs4 tense section a freaking normal data structure cus screw bs4."""
 
 	# get the title of the mood
 	# possible values: [Indicativo, Subjuntivo, Imperativo]
@@ -97,8 +97,7 @@ def dic_mood(bs4_tense_section):
 
 	# Get all the tenses of the mood into a list of tags
 	# Possible values: eg. [affirmative, negative] for imperative
-	mood_tenses = bs4_tense_section.find_all(
-		"div", {"class": "tempo-conjugacao"})
+	mood_tenses = bs4_tense_section.find_all("div", {"class": "tempo-conjugacao"})
 
 	# Parse the mood tenses
 	mood_tenses_parsed = dict([dic_tense(mood_tense, mood_title)
@@ -132,16 +131,14 @@ def scrape_verb(verb_string, dump=True):
 
 
 def dump_verb(verb_string, verb_conjugation_set):
-	"""save the verb data"""
-
-	# You know it
+	"""Save the verb data"""
 	print('Saving data for verb {}...'.format(verb_string))
 	path = os.path.join(HOME, VERB_JSON_LOCATION, VERB_JSON_FILENAME.format(verb_string))
 	json.dump(verb_conjugation_set, open(path, 'w'))
 
 
 def scrape_verbs(verbs_to_scrape, dump=True):
-	"""Scrape all the verbs"""
+	"""Scrape data for all the verbs"""
 
 	# Set up the folder structure if necessary
 	path = os.path.join(HOME, VERB_JSON_LOCATION)
@@ -154,10 +151,10 @@ def scrape_verbs(verbs_to_scrape, dump=True):
 		scrape_verb(verb)
 
 
-# main method
+# Main method
 if __name__ == "__main__":
 
-	# Verbs to do shit for
+	# Verbs to do stuff for
 	verbs = json.load(open(os.path.join(HOME, TOP_VERB_LIST_LOCATION), 'r'))
 
 	# Run

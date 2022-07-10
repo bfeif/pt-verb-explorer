@@ -14,8 +14,8 @@ def load_verb_json_data(verb_strings):
     return verb_data
 
 
-def build_verb_table(verb_list, save=True):
-    """Function that builds the verb table"""
+def build_verb_table(verb_list: list, save=True):
+    """Builds verb tables, given a list of verbs."""
 
     print('Building verb tables...')
 
@@ -23,8 +23,8 @@ def build_verb_table(verb_list, save=True):
     verbs = load_verb_json_data(verb_list)
 
     # prepare for the multiindex
-    conjs_dfs  = []
-    irregs_dfs = []
+    conjugation_dfs  = []
+    irregularity_dfs = []
     for verb_string, verb in verbs.items():
         conjs_multified = {}
         irregs_multified = {}
@@ -34,14 +34,14 @@ def build_verb_table(verb_list, save=True):
                     key = (mood, tense, subject)
                     conjs_multified[key] = {verb_string: k['conjugation']}
                     irregs_multified[key] = {verb_string: k['irregular']}
-        conjs_df  = pd.DataFrame.from_dict(conjs_multified, orient='index', columns=[verb_string])
-        irregs_df = pd.DataFrame.from_dict(irregs_multified, orient='index', columns=[verb_string])
-        conjs_dfs.append(conjs_df)
-        irregs_dfs.append(irregs_df)
+        conjugation_df  = pd.DataFrame.from_dict(conjs_multified, orient='index', columns=[verb_string])
+        irregularity_df = pd.DataFrame.from_dict(irregs_multified, orient='index', columns=[verb_string])
+        conjugation_dfs.append(conjugation_df)
+        irregularity_dfs.append(irregularity_df)
     
     # create the verb tables from the lists of dfs
-    conjs_verb_table  = pd.concat(conjs_dfs, axis=1)
-    irregs_verb_table = pd.concat(irregs_dfs, axis=1)
+    conjs_verb_table = pd.concat(conjugation_dfs, axis=1)
+    irregs_verb_table = pd.concat(irregularity_dfs, axis=1)
 
     # save them out
     if save:
