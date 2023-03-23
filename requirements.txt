@@ -8,3 +8,6 @@ beautifulsoup4==4.11.1
 ipython==7.34.0
 jupyter==1.0.0
 html5lib==1.1
+plotly==5.9.0
+translate==3.6.1
+statsmodels==0.13.2

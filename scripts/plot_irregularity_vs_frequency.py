@@ -5,8 +5,13 @@ import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
+import plotly.express as px
+import plotly.graph_objects as go
 HOME = '.'
 DATA_FOLDER = os.path.join(HOME, 'data')
+FOCUS_VERBS = ["ser", "dar", "andar", "chegar"]
+verb_pt_en_translations = json.load(open(os.path.join(DATA_FOLDER, 'verb-list', 'verbs_pt_en.json')))
+
 
 #################################################
 # CREATE VERB CONJUGATION/IRREGULARITY TABLE
@@ -58,39 +63,67 @@ verb_df = verb_irregularity_df.merge(
 )
 verb_df['term_frequency'] = verb_df['term_count'] / verb_df['term_count'].sum()
 verb_df['term_frequency'] = verb_df['term_frequency'].fillna(0)
+print(verb_df.head())
 hierarchical_index_mapper = {
-    "level_0": "verb",
+    "level_0": "infinitive",
     "level_1": "mood",
     "level_2": "tense",
     "level_3": "subject"}
 verb_df = verb_df.reset_index().rename(hierarchical_index_mapper, axis=1)
-
-# plot verb frequency vs irregularity
-verb_df.groupby(
-    'verb'
+verb_agg = verb_df.groupby(
+    'infinitive'
 ).agg(
     frequency=("term_frequency", "sum"),
     irregularity=("is_irregular", "mean")
-).plot(kind='scatter', x="frequency", y="irregularity")
-plt.xscale('log')
-plt.xlim((10**-4, 10**0))
-plt.xlabel('Verb Frequency')
-plt.ylabel('Verb Irregularity')
-plt.title('Verb Frequency vs Irregularity, Brazilian Portuguese')
-plt.show()
+).sort_values(by='frequency', ascending=False).reset_index()
+verb_agg['frequency_rank'] = np.arange(1, len(verb_agg) + 1, 1)
+
+# add english translations
+print(verb_agg.head())
+verb_agg['infinitive_en'] = verb_agg['infinitive'].apply(lambda x: verb_pt_en_translations[x])
+verb_agg['hover_string'] = verb_agg['infinitive'] + ' (' + verb_agg['infinitive_en'] + ')'
+
+# plot verb frequency vs irregularity
+verb_agg.plot(kind='scatter', x="frequency", y="irregularity")
+focus_verb_mask = verb_agg["infinitive"].isin(FOCUS_VERBS)
+verb_agg["marker_string"] = None
+verb_agg.loc[focus_verb_mask, "marker_string"] = verb_agg.loc[focus_verb_mask, "hover_string"]
+fig = go.Figure()
+fig.add_trace(go.Scatter(
+    mode="markers+text",
+    x=verb_agg["frequency"],
+    y=verb_agg["irregularity"],
+    text=verb_agg['marker_string'],
+    hovertext=verb_agg["hover_string"],
+    marker=dict(color="LightSeaGreen"),
+))
+fig.update_layout(title_text='Verb Frequency vs Irregularity, Brazilian Portuguese')
+fig.update_traces(textposition='top right')
+fig.update_xaxes(
+    type="log",
+    range=[-3.5, 0],
+    title='Verb Frequency'
+)
+fig.update_yaxes(
+    range=[-0.05, 1],
+    title='Verb Irregularity'
+)
+fig.show()
+fig.write_json('verb_frequency_vs_irregularity.json')
 
 # plot verb frequency vs rank
-verb_df.groupby(
-    'verb'
-)["term_frequency"].sum().sort_values(
-    ascending=False
-).reset_index().reset_index().plot(
-    kind='scatter',
-    x='index',
-    y='term_frequency'
-)
-plt.xlabel('Rank')
-plt.ylabel('Verb Frequency')
-plt.title('Verb Frequency vs Rank, Brazilian Portuguese')
-plt.show()
-plt.show()
+fig = go.Figure()
+fig.add_trace(go.Scatter(
+    mode="markers+text",
+    x=verb_agg["frequency_rank"],
+    y=verb_agg["frequency"],
+    text=verb_agg['marker_string'],
+    hovertext=verb_agg["hover_string"],
+    marker=dict(color="LightSeaGreen"),
+))
+fig.update_layout(title_text='Verb Frequency vs Rank, Brazilian Portuguese')
+fig.update_traces(textposition='top right')
+fig.update_xaxes(title='Rank')
+fig.update_yaxes(title='Frequency')
+fig.show()
+fig.write_json('verb_rank_vs_frequency.json')
